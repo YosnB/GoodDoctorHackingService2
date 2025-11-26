@@ -2,7 +2,6 @@ import sys
 import os
 import cv2
 import numpy as np
-import easyocr
 from pathlib import Path
 from PyQt5.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
@@ -12,6 +11,19 @@ from PyQt5.QtGui import QPixmap, QImage, QFont, QColor
 from PyQt5.QtCore import Qt, QRect, pyqtSignal, QPoint, QSize
 from PyQt5.QtCore import QThread
 import importlib.util
+
+
+# グローバル変数：EasyOCRの遅延ロード用
+_ocr_reader = None
+
+
+def get_ocr_reader():
+    """EasyOCRリーダーをシングルトンで取得（遅延ロード）"""
+    global _ocr_reader
+    if _ocr_reader is None:
+        import easyocr
+        _ocr_reader = easyocr.Reader(['ja', 'en'])
+    return _ocr_reader
 
 
 class InteractiveImageLabel(QLabel):
@@ -164,8 +176,8 @@ class OCRWorker(QThread):
             if cropped.size == 0:
                 raise ValueError("抽出された領域が空です")
 
-            # EasyOCRの初期化と処理
-            reader = easyocr.Reader(['ja', 'en'])
+            # EasyOCRの遅延ロード（初回のみ重い）
+            reader = get_ocr_reader()
             result = reader.readtext(cropped, detail=0)
             
             if not result:
