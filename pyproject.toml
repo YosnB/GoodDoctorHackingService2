@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gooddoctor-hacking-service"
+version = "1.0.0"
+description = "An OCR and image analysis tool with encode/decode functionality"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [
+    {name = "YosnB", email = "yosnb@example.com"}
+]
+license = {text = "MIT"}
+
+dependencies = [
+    "PyQt5>=5.15.0",
+    "opencv-python>=4.5.0",
+    "easyocr>=1.6.0",
+    "numpy>=1.21.0",
+    "Pillow>=9.0.0",
+    "pillow-heif>=0.10.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "black>=22.0",
+    "mypy>=0.950",
+]
+
+[project.urls]
+Homepage = "https://github.com/YosnB/GoodDoctorHackingService2"
+Repository = "https://github.com/YosnB/GoodDoctorHackingService2.git"
+Issues = "https://github.com/YosnB/GoodDoctorHackingService2/issues"
+
+[tool.setuptools]
+packages = ["windows"]
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
